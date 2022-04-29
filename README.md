@@ -9,8 +9,9 @@ as it will be shown in the article, which is going to be finished soon and then 
 ### Requirements 
 
 The main requirements are:
-* Python >= 3.9
-* Tensorflow >= 2.0
+* python >= 3.9
+* tensorflow >= 2.0
+* tensornetwork library
 * [QGOpt library](https://github.com/LuchnikovI/QGOpt)
 
 [Qiskit](https://qiskit.org/) library is used just for computing diamond norm and working with IBMQ.
@@ -27,6 +28,12 @@ After cloning, you may install essential libraries by running shell command
 pip install -r requirements.txt
 ```
 
+### Basic usage
+
+TBD. 
+Right now there is a tomography notebook which can be used as tutorial. 
+It has a lot nuances of importance.
+
 ### Self-testing
 
 Since this project is in a work-in-progress state and is not very well documented (yet), it
@@ -36,10 +43,6 @@ To run the tests, install pytest (it is included in requirements) and run the si
 ```
 pytest solver/unit_tests
 ```
-
-### Basic usage
-
-TBD. Right now there are some example notebooks which can be used as tutorials.
 
 
 
