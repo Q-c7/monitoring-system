@@ -2,43 +2,34 @@
 numba
 Cython
 
-# data
+# working with data
 scipy
 numpy
-pandas
 
 # visualisation
 plotly
 matplotlib
-seaborn
 
-# date and time
-tzlocal
+# main ML libs
+tensorflow
+tensornetwork
+QGOpt
 
-# serializers
-lxml
-flatbuffers
-protobuf
+# quantum libs
+cvxpy
+qiskit
 
 # other stuff
 fastapi
 GitPython
 
 # testing and linting
-flake8
-mypy
 pytest
 pytest-timeout
-requests-mock
 pytest-mock
 pytest-cov
 psutil
 
-tensorflow
-torch
-tensornetwork
-QGOpt
 
-cvxpy
-qiskit
+
 
