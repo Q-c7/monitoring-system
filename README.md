@@ -2,7 +2,7 @@
 
 This project may be used as a monitoring system for quantum processors 
 that allows estimating their parameters based on the set of executed quantum circuits.
-Currently it is in a work-in-progress state with lots of drawbacks.   
+Currently it is in a work-in-progress state with lots of drawbacks - typical embodiment of a "research code".   
 However, it was enough to produce satisfactory results,
 as it will be shown in the article, which is going to be finished soon and then published (hopefully).
 
@@ -19,9 +19,10 @@ For a full list of requirements, see `requirements.txt`.
 ### Installation
 
 TBD.   
-Right now, as a workaround, one may clone the repository and run the test Jupyter notebook. 
+Right now, as a workaround, one may clone the repository and run the test Jupyter notebooks. 
+They will import .py files directly from the `solver` folder instead of an installed library.
 Mind the dependencies, since there's no wheel package and pypi to do it automatically.
-After cloning, you may install essential libraries by running shell commadn
+After cloning, you may install essential libraries by running shell command
 ```shell
 pip install -r requirements.txt
 ```
