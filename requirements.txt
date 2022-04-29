@@ -1,0 +1,44 @@
+# c bindings and compillers
+numba
+Cython
+
+# data
+scipy
+numpy
+pandas
+
+# visualisation
+plotly
+matplotlib
+seaborn
+
+# date and time
+tzlocal
+
+# serializers
+lxml
+flatbuffers
+protobuf
+
+# other stuff
+fastapi
+GitPython
+
+# testing and linting
+flake8
+mypy
+pytest
+pytest-timeout
+requests-mock
+pytest-mock
+pytest-cov
+psutil
+
+tensorflow
+torch
+tensornetwork
+QGOpt
+
+cvxpy
+qiskit
+
