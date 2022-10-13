@@ -255,7 +255,7 @@ class QGOptSolver(BaseSolver):
                          compress_samples, noise_params)
 
         if initial_estimated_gates_override is not None:
-            self._run_sanity_checks_for_checkpoint(initial_estimated_gates_override)
+            self._run_sanity_checks_for_checkpoint(pure_channels_set, initial_estimated_gates_override)
             self.estimated_gates_dict = initial_estimated_gates_override
             print("Sanity checks passed; estimated set is successfully loaded from provided checkpoint")
         else:
@@ -265,21 +265,23 @@ class QGOptSolver(BaseSolver):
         self.eval_estimated = QCEvaluator(unwrap_dict(get_complex_channel_form(self.estimated_gates_dict)), self.n)
         self.timestamps: dict[str, float] = {}
 
-    def _run_sanity_checks_for_checkpoint(self, initial_estimated_gates_override: dict[str, tf.Variable]) -> None:
+    def _run_sanity_checks_for_checkpoint(self,
+                                          pure_channels_set: GateSet,
+                                          initial_estimated_gates_override: dict[str, tf.Variable]) -> None:
         # TODO: write tests on this checkpoint loading procedure
-        if self.pure_channels_set.keys() != initial_estimated_gates_override.keys():
+        if initial_estimated_gates_override.keys() != pure_channels_set.keys():
             raise ValueError("Wrong set of quantum gates")
         for one_qub_key in self.single_qub_gates_names:
-            assert initial_estimated_gates_override[one_qub_key].shape[0] == qubits_num, \
-                f"Wrong number of noised gates for single-qubit gate {one_qub_key}, must be {qubits_num}"
-            assert initial_estimated_gates_override[one_qub_key].shape[-1, -2] == (4, 4), \
-                f"Wrong shape of passed gates with label {one_qub_key}, must be {(4, 4)}"
+            assert initial_estimated_gates_override[one_qub_key].shape[0] == self.n, \
+                f"Wrong number of noised gates for single-qubit gate {one_qub_key}, must be {self.n}"
+            assert initial_estimated_gates_override[one_qub_key].shape[1:] == (4, 4, 2), \
+                f"Wrong shape of passed gates with label {one_qub_key}, must be {(4, 4, 2)}"
         for two_qub_key in self.two_qub_gates_names:
-            assert initial_estimated_gates_override[two_qub_key].shape[0] == qubits_num * (qubits_num - 1) / 2, \
+            assert initial_estimated_gates_override[two_qub_key].shape[0] == self.n * (self.n - 1), \
                 f"Wrong number of noised gates for two-qubit gate {two_qub_key}," \
-                f" must be {qubits_num * (qubits_num - 1) / 2}"
-            assert initial_estimated_gates_override[two_qub_key].shape[-1, -2] == (16, 16), \
-                f"Wrong shape of passed gates with label {two_qub_key}, must be {(16, 16)}"
+                f" must be {self.n * (self.n - 1)}"
+            assert initial_estimated_gates_override[two_qub_key].shape[1:] == (16, 16, 2), \
+                f"Wrong shape of passed gates with label {two_qub_key}, must be {(16, 16, 2)}"
 
     def _init_estimated(self, pure_channels_set: GateSet, noise_iter0: float = 0.0) -> None:
         init_noise = tf.convert_to_tensor([noise_iter0, 0.0, 0.0], dtype=FLOAT)
@@ -577,14 +579,14 @@ class QGOptSolverDebug(QGOptSolver):
                  noise_params: NoiseParams = None,
                  initial_estimated_gates_override: tp.Optional[dict[str, tf.Variable]] = None,
                  noise_iter0: float = 0.0):
-        super(QGOptSolverDebug, self).__init__(qubits_num=qubits_num,
-                                               single_qub_gates_names=single_qub_gates_names,
-                                               two_qub_gates_names=two_qub_gates_names,
-                                               pure_channels_set=pure_channels_set,
-                                               compress_samples=compress_samples,
-                                               noise_params=noise_params,
-                                               initial_estimated_gates_override=initial_estimated_gates_override,
-                                               noise_iter0=noise_iter0)
+        super().__init__(qubits_num=qubits_num,
+                         single_qub_gates_names=single_qub_gates_names,
+                         two_qub_gates_names=two_qub_gates_names,
+                         pure_channels_set=pure_channels_set,
+                         compress_samples=compress_samples,
+                         noise_params=noise_params,
+                         initial_estimated_gates_override=initial_estimated_gates_override,
+                         noise_iter0=noise_iter0)
 
         self.pure_channels_set = pure_channels_set
         self.starting_pos_dict = get_complex_channel_form(self.estimated_gates_dict)
