@@ -1,3 +1,4 @@
+import numpy as np
 import tensorflow as tf  # tf 2.x
 import math
 import scipy
@@ -153,12 +154,12 @@ def fidel_calc_1q(channel1: tf.Tensor, channel2: tf.Tensor) -> tf.Tensor:
     Calculates fidelity between two arbitrary ncon 1-qubit channels represented as Tensors(4,4)[complex128]
     """
     choi1 = choi_swap_1qchannel(channel1) / tf.constant(2, COMPLEX)
-    sqrt_choi1 = scipy.linalg.sqrtm(choi1)
+    sqrt_choi1 = scipy.linalg.sqrtm(choi1).astype(np.complex128)
 
     choi2 = choi_swap_1qchannel(channel2) / tf.constant(2, COMPLEX)
 
-    sqrt_matrix = scipy.linalg.sqrtm(sqrt_choi1 @ choi2 @ sqrt_choi1)
-    trace = tf.linalg.trace(sqrt_matrix)
+    sqrt_matrix = scipy.linalg.sqrtm(sqrt_choi1 @ choi2 @ sqrt_choi1).astype(np.complex128)
+    trace = tf.linalg.trace(tf.convert_to_tensor(sqrt_matrix, dtype=COMPLEX))
     return trace ** 2
 
 
@@ -167,12 +168,12 @@ def fidel_calc_2q(channel1: tf.Tensor, channel2: tf.Tensor) -> tf.Tensor:
     Calculates fidelity between two arbitrary ncon 2-qubit channels represented as Tensors(4,4,4,4)[complex128]
     """
     choi1 = choi_swap_2qchannel(channel1) / tf.constant(4, COMPLEX)
-    sqrt_choi1 = scipy.linalg.sqrtm(choi1)
+    sqrt_choi1 = scipy.linalg.sqrtm(choi1).astype(np.complex128)
 
     choi2 = choi_swap_2qchannel(channel2) / tf.constant(4, COMPLEX)
 
-    sqrt_matrix = scipy.linalg.sqrtm(sqrt_choi1 @ choi2 @ sqrt_choi1)
-    trace = tf.linalg.trace(sqrt_matrix)
+    sqrt_matrix = scipy.linalg.sqrtm(sqrt_choi1 @ choi2 @ sqrt_choi1).astype(np.complex128)
+    trace = tf.linalg.trace(tf.convert_to_tensor(sqrt_matrix, dtype=COMPLEX))
     return trace ** 2
 
 

@@ -28,11 +28,11 @@ class QCEvaluator:
             in_states: Quantum states which serve as input for quantum circuit.
             At this moment these are all hard-coded to be |0>^n.
         """
-
         self.gates = gates
         self.circuits: dict[str, NconTemplate] = {}
         self.n = n
-        self.in_states = n * [tf.constant([1, 0, 0, 0], dtype=COMPLEX)]
+        self.dim = 3
+        self.in_states = n * [tf.constant([1] + (self.dim ** 2 - 1) * [0], dtype=COMPLEX)]
 
     def add_circuit(self, tn_template: NconTemplate, name: str) -> None:
         """
@@ -106,7 +106,7 @@ class QCEvaluator:
             out_new_order = (-2,)
 
         # now we take care about plugs - qubits after l which are going to be sampled later
-        plugs = (self.n - qubit_id) * [tf.constant([1, 0, 0, 1], dtype=COMPLEX)]
+        plugs = (self.n - qubit_id) * [tf.constant([1, 0, 0, 1], dtype=COMPLEX)]  # |0> + |1>
         out_tensors = out_tensors + plugs
 
         # we unpack a tensor network template, then add slices, add target qubit, add plugs, and finally input legs
